@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Maize Disease Solution</title>
+    <link rel="stylesheet" href="{% static 'c1/css/styles.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js"></script>
+    <style>
+        .logout-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #00FF00; /* Green background */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #00cc00; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</button>
+    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <h1>Disease: {{ disease }}</h1>
+
+    <!-- Navigation Links -->
+    <nav class="navigation">
+        <button id="reason-nav" class="nav-button active">Reason for Disease</button>
+        <button id="organic-nav" class="nav-button">Organic Solutions</button>
+        <button id="inorganic-nav" class="nav-button">Inorganic Solutions</button>
+    </nav>
+
+    <!-- Sections containers -->
+    <div class="solutions-container">
+        <!-- Reason for Disease -->
+        <div id="reason-container" class="solution-container active">
+            <h2>Reason for Disease</h2>
+            <p>{{ reason }}</p>
+        </div>
+
+        <!-- Organic Solutions -->
+        <div id="organic-container" class="solution-container">
+            <h2>Organic Solutions</h2>
+            <div>
+                {% for solution in organic_solutions %}
+                    <div class="solution">
+                        <p>{{ solution }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Inorganic Solutions -->
+        <div id="inorganic-container" class="solution-container">
+            <h2>Inorganic Solutions</h2>
+            <div>
+                {% for solution in inorganic_solutions %}
+                    <div class="solution">
+                        <p>{{ solution }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <button id="generate-pdf">Download PDF</button>
+    <a href="{% url 'home' %}" class="btn">Back to Home</a>
+
+    <script src="{% static 'c1/js/scripts1.js' %}"></script>
+</body>
+</html>

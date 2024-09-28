@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            background-color: #000; /* Black background */
+            color: #e5ff00; /* Green text */
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #111; /* Slightly lighter black for contrast */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px #eeff00; /* Green glow effect */
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-container h2 {
+            color: #ffee00; /* Green text */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-container label {
+            color: #eeff00;
+            font-weight: bold;
+        }
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="password"] {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #222; /* Dark input background */
+            color: #e5ff00; /* Green text */
+            border: 1px solid #fffb00; /* Green border */
+            border-radius: 4px;
+        }
+
+        .form-container button {
+            width: 95%;
+            padding: 10px;
+            background-color: #ffc400; /* Green button background */
+            color: #000; /* Black text */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-container button:hover {
+            background-color: #ccc900; /* Darker green on hover */
+        }
+
+        .form-container a {
+            color: #fffb00; /* Green links */
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'c1/css/styles.css' %}" />
+</head>
+<body>
+    <div class="form-container">
+        <h2>Register</h2>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            
+            <button type="submit">Register</button>
+        </form>
+        <a href="{% url 'login' %}">Already have an account? Login</a>
+    </div>
+</body>
+</html>

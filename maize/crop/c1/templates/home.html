@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Maize Disease Detector</title>
+    <link rel="stylesheet" href="{% static 'c1/css/styles.css' %}" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.11/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/opencv.js/4.5.5/opencv.min.js"></script>
+    <style>
+        .logout-button {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background-color: #00FF00; /* Green background */
+            color: #000; /* Black text */
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #00cc00; /* Darker green on hover */
+        }
+    </style>
+</head>
+<body>
+    <button class="logout-button" onclick="document.getElementById('logout-form').submit();">Logout</button>
+    <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+        {% csrf_token %}
+    </form>
+
+    <h1 class="animate animated animate fadeInDown">
+        Welcome, {{ username }}!
+    </h1>
+    <div id="quote" class="animate animated animate fadeInUp"></div>
+
+    <!-- Input Method Selection -->
+    <div class="input-selection">
+        <select id="input-method" class="animate animated animate fadeInUp">
+            <option value="upload">Upload Image</option>
+            <option value="webcam">Use Webcam</option>
+        </select>
+    </div>
+
+    <!-- Upload Image Section -->
+    <div id="upload-section" class="input-section animate animated animate fadeInUp">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="image" required class="animate animated animate bounceIn" />
+            <button type="submit" class="animate animated animate pulse">Upload</button>
+        </form>
+    </div>
+
+    <!-- Webcam Section -->
+    <div id="webcam-section" class="input-section animate animated animate fadeInUp" style="display:none;">
+        <video id="video" width="640" height="480" autoplay></video>
+        <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
+        <div>
+            <button id="start-camera">Start Camera</button>
+            <button id="stop-camera" style="display:none;">Stop Camera</button>
+        </div>
+    </div>
+
+    <!-- Prediction Result -->
+    <div id="prediction-result" class="animate animated animate fadeInUp">
+        <!--\<h2>Current Prediction:</h2>        {% for solution in predicted_class %}
+                    <div class="solution">
+                        <p>{{ solution }}</p>
+                    </div>
+                {% endfor %}
+        <p id="current-prediction"></p>
+    </div> -->
+
+    <!-- Disease Detection and Solution Link -->
+    {% if latest_prediction and latest_prediction.disease != 'Healthy' %}
+        <div id="disease-detected" class="animate animated animate fadeInUp">
+            <p>Disease detected: {{ latest_prediction.disease }}</p>
+            <a href="{% url 'solution' disease=latest_prediction.disease %}" class="btn">View Solutions</a>
+        </div>
+    {% endif %}
+
+    <!-- Toggle History Section -->
+    <button id="toggle-history" class="animate animated animate fadeInUp">Show History</button>
+
+    <!-- Display History Section -->
+    <div id="history-container" class="history-container" style="display:none;">
+        <h3 class="animate animated animate fadeInUp">Prediction History</h3>
+        <ul id="prediction-history">
+            {% for prediction in predictions %}
+            <li class="animate animated animate fadeInLeft">
+                {{ prediction.created_at }} - {{ prediction.disease }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script src="{% static 'c1/js/scripts.js' %}"></script>
+</body>
+</html>
